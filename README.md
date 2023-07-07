@@ -1,0 +1,2 @@
+# Conversation_Practice
+在模拟特定情境下使用指定语言进行对话练习，使用python作为后端，可自定义各种功能请求的接口。
