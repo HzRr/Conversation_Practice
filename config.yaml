@@ -1,0 +1,7 @@
+plugins:
+  port:
+    conversation: '11111'
+    grammar_checker: '11112'
+    pronunciation_checker: '11113'
+    stt: '11114'
+    tts: '11115'
