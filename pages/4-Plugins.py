@@ -1,10 +1,13 @@
 import streamlit as st
 import traceback
 from utils import check_config_file_existence, read_config, write_config
+from utils import get_plugins_list, get_plugin_type, plugins_path
+import subprocess
+import os
 
 
 def select_plugins():
-    # 获取插件列表
+    # 获取不同类型插件字典
     pass
 
 def install_plugins():
@@ -13,6 +16,7 @@ def install_plugins():
     st.markdown(body="<hr>", unsafe_allow_html=True)
 
     def official_plugins():
+        # TODO 获取github用户仓库列表
         pass
         
     def custom_plugins():
@@ -22,7 +26,26 @@ def install_plugins():
             if repository_url == '':
                 st.warning("url不能为空")
             else:
-                pass
+                try: 
+                    # 构建安装命令
+                    plugin_name = repository_url.split("/")[-1]
+                    plugin_path = os.path.join(plugins_path, plugin_name)
+                    raw_install_cmd = f"git clone {repository_url} {plugin_path}"
+                    install_cmd = raw_install_cmd.split(" ")
+
+                    # git clone repository_url plugin_path
+                    st.info(f"正在克隆{plugin_name}仓库到本地: {raw_install_cmd}")
+                    subprocess.run(install_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+
+                except subprocess.CalledProcessError as e:
+                    st.error(f"克隆时出错, 请检查仓库url是否正确或重试: {e}")
+
+                except Exception as e:
+                    st.error(f"克隆时出错, 请检查仓库url是否正确或重试: {e}")
+                    
+                else:
+                    st.success(f"插件 {plugin_name} 安装成功！")
+
     install_plugins_columns_pages_dict = {
         "官方插件": official_plugins,
         "自定义插件": custom_plugins,
